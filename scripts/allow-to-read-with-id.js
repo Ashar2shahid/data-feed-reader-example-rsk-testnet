@@ -7,13 +7,13 @@ async function main() {
     DataFeedReaderExample.abi,
     hre.ethers.provider
   );
-  const selfServeDapiServerWhitelisterAddressOnPolygonTestnet = '0x78D95f27B068F36Bd4c3f29e424D7072D149DDF3';
+  const selfServeDapiServerWhitelisterAddressOnRskTestnet = '0x928922A4e2D3f96Ce72002A5EA7481BEF4F12fD6';
   const selfServeDapiServerWhitelisterAbi = [
     'function allowToReadDataFeedWithIdFor30Days(bytes32 dataFeedId, address reader) public',
     'function allowToReadDataFeedWithDapiNameFor30Days(bytes32 dapiName, address reader) external',
   ];
   const selfServeDapiServerWhitelister = new hre.ethers.Contract(
-    selfServeDapiServerWhitelisterAddressOnPolygonTestnet,
+    selfServeDapiServerWhitelisterAddressOnRskTestnet,
     selfServeDapiServerWhitelisterAbi,
     (await hre.ethers.getSigners())[0]
   );

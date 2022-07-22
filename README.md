@@ -12,32 +12,27 @@ API3 serves three kinds of data feeds:
 
 All data feeds that API3 serves on a chain can be read from a single DapiServer contract using the name for dAPIs and
 the ID for Beacons and Beacon sets. In this repo, we inherit the DapiReader contract to implement an example data feed
-reader contract that does both.
-
-## About Polygon testnet
-
-We duplicated all of our data feeds across all mainnets on the Polygon testnet, as it is relatively stable and its
-faucet and RPC endpoints are reliable. Extending this to other testnets is not trivial, which is why we are not planning
-to do so in the foreseeable future.
+reader contract that reads from Beacon IDs.
 
 ## Access control
 
 Anyone can read an API3 data feed with an off-chain, static call. However, only contracts allowed by an authorized
 account are allowed to read on-chain. For production use-cases on mainnet, you will need to pay for contract read
-access. On Polygon testnet, there is a contract that you can call to allow your contract to do on-chain reads for free
-for testing purposes, which we use in this repo.
+access. On Rsk Testnet, there is a contract that you can call to allow your contract to do on-chain reads for free for
+testing purposes, which we use in this repo.
 
-## dAPI names and data feed IDs
+## data feed IDs
 
-dAPIs are read using their names. You can find the dAPIs available on the Polygon testnet
-[here](https://docs.api3.org/dapis/reference/dapi-browser.html) or
-[here](https://github.com/api3dao/operations/blob/main/data/dapis/polygon-testnet.json). While using the scripts in this
-repo, you will need to specify dAPI names as the environment variable `DAPI_NAME`.
+Beacons and Beacon sets are read using their IDs. You can find the Beacons Ids(known as Datafeed Id) here:
 
-Beacons and Beacon sets are read using their IDs. You can find the Beacons available on the Polygon testnet
-[here](https://github.com/api3dao/operations/tree/main/data/apis), in `beacons/` under the respective API provider's
-directory. While using the scripts in this repo, you will need to specify data feed ID as the environment variable
-`DATA_FEED_ID`.
+```
+  "RBTC/BTC": "0x4aaf6e2ef7fc8280aa99d321e53ef2e4f111b7805677a262eb5882b1a27b5108",
+  "RBTC/USD": "0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01",
+  "RIF/USD": "0x3c7ba811cb33ad3784389a580af1a657ce0ebd701b1eb415eafabe5a4885e92f",
+  "
+```
+
+While using the scripts in this repo, you will need to specify data feed ID as the environment variable `DATA_FEED_ID`.
 
 ## Installation instructions
 
@@ -61,14 +56,12 @@ Use the scripts below to read the data feeds off-chain. You need to do the stati
 see the scripts for details.
 
 ```sh
-DAPI_NAME=BTC/USD yarn run:off-chain-read-with-name
-
-DATA_FEED_ID=0x01aadef3e56974c0ed8829b34353495191c1362f48bb5aa9533835c00cb2a7af yarn run:off-chain-read-with-id
+DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:off-chain-read-with-id
 ```
 
 ## Deploying DataFeedReaderExample
 
-- Get Mumbai MATIC from the [faucet](https://faucet.polygon.technology/)
+- Get RSK Testnet tokens from the [faucet](https://faucet.rsk.co/)
 
 - Deploy DataFeedReaderExample
 
@@ -76,46 +69,25 @@ DATA_FEED_ID=0x01aadef3e56974c0ed8829b34353495191c1362f48bb5aa9533835c00cb2a7af 
 yarn deploy
 ```
 
-## Reading dAPIs with name using DataFeedReaderExample
-
-First, send a transaction to allow the deployed DataFeedReaderExample contract to read the dAPI. Note that you only need
-to do this once, and [you can only do this on Polygon testnet](#access-control).
-
-```sh
-DAPI_NAME=BTC/USD yarn run:allow-to-read-with-name
-```
-
-Then, you can use the script below to have the DataFeedReaderExample contract read the dAPI.
-
-```sh
-DAPI_NAME=BTC/USD yarn run:read-with-name
-```
-
-You can also omit the timestamp and only read the value.
-
-```sh
-DAPI_NAME=BTC/USD yarn run:read-value-with-name
-```
-
 ## Reading data feeds with ID using DataFeedReaderExample
 
 First send a transaction to allow the deployed DataFeedReaderExample contract to read the data feed. Note that you only
-need to do this once, and [you can only do this on Polygon testnet](#access-control).
+need to do this once, and [you can only do this on RSK testnet](#access-control).
 
 ```sh
-DATA_FEED_ID=0x01aadef3e56974c0ed8829b34353495191c1362f48bb5aa9533835c00cb2a7af yarn run:allow-to-read-with-id
+DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:allow-to-read-with-id
 ```
 
 Then, you can use the script below to have the DataFeedReaderExample contract read the data feed.
 
 ```sh
-DATA_FEED_ID=0x01aadef3e56974c0ed8829b34353495191c1362f48bb5aa9533835c00cb2a7af yarn run:read-with-id
+DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:read-with-id
 ```
 
 You can also omit the timestamp and only read the value.
 
 ```sh
-DATA_FEED_ID=0x01aadef3e56974c0ed8829b34353495191c1362f48bb5aa9533835c00cb2a7af yarn run:read-value-with-id
+DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:read-value-with-id
 ```
 
 ## Local development and testing
