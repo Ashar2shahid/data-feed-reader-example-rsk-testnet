@@ -1,4 +1,5 @@
 const hre = require('hardhat');
+const dataFeedIds = require('../dataFeedIds.json');
 
 async function main() {
   const DataFeedReaderExample = await hre.deployments.get('DataFeedReaderExample');
@@ -7,18 +8,20 @@ async function main() {
     DataFeedReaderExample.abi,
     hre.ethers.provider
   );
-  const dataFeedId = process.env.DATA_FEED_ID;
-  if (!dataFeedId) {
-    throw new Error('Data feed ID not defined');
-  }
-  const dataFeed = await dataFeedReaderExample.readDataFeedWithId(dataFeedId);
-  console.log(
-    `DataFeedReaderExample at ${
-      DataFeedReaderExample.address
-    } read data feed with ID ${dataFeedId} as \n  value: ${dataFeed.value.toString()}\n  timestamp: ${dataFeed.timestamp.toString()} (${new Date(
+  const dataFeedValues = (await Promise.all(
+    Object.entries(dataFeedIds)
+      .map(async ([name, id]) => ({ 
+        name,
+        id,
+        dataFeed: await dataFeedReaderExample.readDataFeedWithId(id),
+       })),
+  ));
+  console.log(`DataFeedReaderExample at ${DataFeedReaderExample.address}`);
+  dataFeedValues.forEach(({ name, id, dataFeed }) => {
+    console.log(` read ${name} data feed with ID ${id} as \n  value: ${dataFeed.value.toString()}\n  timestamp: ${dataFeed.timestamp.toString()} (${new Date(
       dataFeed.timestamp.toNumber() * 1000
-    ).toISOString()})`
-  );
+    ).toISOString()})`);
+  });
 }
 
 main()
