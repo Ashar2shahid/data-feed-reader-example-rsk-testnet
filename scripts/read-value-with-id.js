@@ -8,14 +8,13 @@ async function main() {
     DataFeedReaderExample.abi,
     hre.ethers.provider
   );
-  const dataFeedValues = (await Promise.all(
-    Object.entries(dataFeedIds)
-      .map(async ([name, id]) => ({ 
-        name,
-        id,
-        value: await dataFeedReaderExample.readDataFeedValueWithId(id),
-       })),
-  ));
+  const dataFeedValues = await Promise.all(
+    Object.entries(dataFeedIds).map(async ([name, id]) => ({
+      name,
+      id,
+      value: await dataFeedReaderExample.readDataFeedValueWithId(id),
+    }))
+  );
   console.log(`DataFeedReaderExample at ${DataFeedReaderExample.address}`);
   dataFeedValues.forEach(({ name, id, value }) => {
     console.log(` read ${name} value with ID ${id} as \n    value: ${value.toString()}`);
