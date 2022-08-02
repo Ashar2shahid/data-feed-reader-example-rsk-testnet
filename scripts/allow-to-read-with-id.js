@@ -1,4 +1,5 @@
 const hre = require('hardhat');
+const dataFeedIds = require('../dataFeedIds.json');
 
 async function main() {
   const DataFeedReaderExample = await hre.deployments.get('DataFeedReaderExample');
@@ -17,28 +18,31 @@ async function main() {
     selfServeDapiServerWhitelisterAbi,
     (await hre.ethers.getSigners())[0]
   );
-  const dataFeedId = process.env.DATA_FEED_ID;
-  if (!dataFeedId) {
-    throw new Error('Data feed ID not defined');
-  }
-  const receipt = await selfServeDapiServerWhitelister.allowToReadDataFeedWithIdFor30Days(
-    dataFeedId,
-    DataFeedReaderExample.address
-  );
-  await new Promise((resolve) =>
-    hre.ethers.provider.once(receipt.hash, () => {
-      resolve();
-    })
-  );
-  const accessStatus = await dataFeedReaderExample.dataFeedIdToReaderToWhitelistStatus(
-    dataFeedId,
-    dataFeedReaderExample.address
-  );
-  console.log(
-    `DataFeedReaderExample is allowed to read the data feed with ID ${dataFeedId} until ${new Date(
-      accessStatus.expirationTimestamp.toNumber() * 1000
-    ).toISOString()}. It is granted indefinite access ${accessStatus.indefiniteWhitelistCount} times.`
-  );
+
+  console.log(`DataFeedReaderExample is allowed...`);
+  const dataFeedArr = Object.entries(dataFeedIds);
+  const sendTxsSequentially = async () => {
+    const nameAndId = dataFeedArr.pop();
+    if (nameAndId) {
+      const [name, id] = nameAndId;
+      const allowToReadReceipt = await selfServeDapiServerWhitelister.allowToReadDataFeedWithIdFor30Days(
+        id,
+        DataFeedReaderExample.address
+      );
+      await allowToReadReceipt.wait();
+      const accessStatus = await dataFeedReaderExample.dataFeedIdToReaderToWhitelistStatus(
+        id,
+        dataFeedReaderExample.address
+      );
+      console.log(
+        ` to read ${name} data feed with ID ${id} until ${new Date(
+          accessStatus.expirationTimestamp.toNumber() * 1000
+        ).toISOString()}. It is granted indefinite access ${accessStatus.indefiniteWhitelistCount} times.`
+      );
+      await sendTxsSequentially();
+    }
+  };
+  await sendTxsSequentially();
 }
 
 main()

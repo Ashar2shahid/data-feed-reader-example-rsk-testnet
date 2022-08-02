@@ -66,22 +66,8 @@ yarn deploy
 First send a transaction to allow the deployed DataFeedReaderExample contract to read the data feed. Note that you only
 need to do this once, and [you can only do this on RSK testnet](#access-control).
 
-RBTC/BTC:
-
 ```sh
-DATA_FEED_ID=0x4aaf6e2ef7fc8280aa99d321e53ef2e4f111b7805677a262eb5882b1a27b5108 yarn run:allow-to-read-with-id
-```
-
-RBTC/USD:
-
-```sh
-DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:allow-to-read-with-id
-```
-
-RIF/USD:
-
-```sh
-DATA_FEED_ID=0x3c7ba811cb33ad3784389a580af1a657ce0ebd701b1eb415eafabe5a4885e92f yarn run:allow-to-read-with-id
+yarn run:allow-to-read-with-id
 ```
 
 Then, you can use the script below to have the DataFeedReaderExample contract read the data feed.
