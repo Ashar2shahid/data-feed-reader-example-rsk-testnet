@@ -23,16 +23,8 @@ testing purposes, which we use in this repo.
 
 ## data feed IDs
 
-Beacons and Beacon sets are read using their IDs. You can find the Beacons Ids(known as Datafeed Id) here:
-
-```
-  "RBTC/BTC": "0x4aaf6e2ef7fc8280aa99d321e53ef2e4f111b7805677a262eb5882b1a27b5108",
-  "RBTC/USD": "0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01",
-  "RIF/USD": "0x3c7ba811cb33ad3784389a580af1a657ce0ebd701b1eb415eafabe5a4885e92f",
-  "
-```
-
-While using the scripts in this repo, you will need to specify data feed ID as the environment variable `DATA_FEED_ID`.
+Beacons and Beacon sets are read using their IDs. You can find the Beacons Ids(known as Datafeed Id) in
+`./dataFeedIds.json`
 
 ## Installation instructions
 
@@ -56,7 +48,7 @@ Use the scripts below to read the data feeds off-chain. You need to do the stati
 see the scripts for details.
 
 ```sh
-DATA_FEED_ID=0x5295f30436b2077a67c02001f62e8aabcc6688d87a8ce8db6f2b7a7cad4f0b01 yarn run:off-chain-read-with-id
+yarn run:off-chain-read-with-id
 ```
 
 ## Deploying DataFeedReaderExample
