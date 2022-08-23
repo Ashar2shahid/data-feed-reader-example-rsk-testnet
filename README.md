@@ -21,6 +21,13 @@ account are allowed to read on-chain. For production use-cases on mainnet, you w
 access. On Rsk Testnet, there is a contract that you can call to allow your contract to do on-chain reads for free for
 testing purposes, which we use in this repo.
 
+## Contract Addresses on RSK Testnet
+
+```
+DapiServer: "0x3A09C138609F4b944EB7B8F0730e1972C243B33a"
+SelfServeDapiServerWhitelister: "0x928922A4e2D3f96Ce72002A5EA7481BEF4F12fD6"
+```
+
 ## data feed IDs
 
 Beacons and Beacon sets are read using their IDs. You can find the Beacons Ids(known as Datafeed Id) here:
