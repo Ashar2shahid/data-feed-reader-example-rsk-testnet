@@ -1,4 +1,5 @@
 const hre = require('hardhat');
+const dataFeedIds = require('../dataFeedIds.json');
 
 async function main() {
   const DataFeedReaderExample = await hre.deployments.get('DataFeedReaderExample');
@@ -7,16 +8,17 @@ async function main() {
     DataFeedReaderExample.abi,
     hre.ethers.provider
   );
-  const dataFeedId = process.env.DATA_FEED_ID;
-  if (!dataFeedId) {
-    throw new Error('Data feed ID not defined');
-  }
-  const dataFeedValue = await dataFeedReaderExample.readDataFeedValueWithId(dataFeedId);
-  console.log(
-    `DataFeedReaderExample at ${
-      DataFeedReaderExample.address
-    } read data feed value with ID ${dataFeedId} as \n  value: ${dataFeedValue.toString()}`
+  const dataFeedValues = await Promise.all(
+    Object.entries(dataFeedIds).map(async ([name, id]) => ({
+      name,
+      id,
+      value: await dataFeedReaderExample.readDataFeedValueWithId(id),
+    }))
   );
+  console.log(`DataFeedReaderExample at ${DataFeedReaderExample.address}`);
+  dataFeedValues.forEach(({ name, id, value }) => {
+    console.log(` read ${name} value with ID ${id} as \n    value: ${value.toString()}`);
+  });
 }
 
 main()
